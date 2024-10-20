@@ -1,6 +1,12 @@
 import * as Carousel from "./Carousel.js";
 import axios from "axios";
 
+//const API = axios.create({
+//	baseURL: 'http://localhost:3000/',
+//})
+
+//export default API; */
+
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
 // The information section div element.
@@ -14,14 +20,28 @@ const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 const API_KEY = "live_2L5qpy6HjWEc4qxT1JVDCifdbhbUKnvSXv3S5Awwj7ygiHvXZgwvqCPjpaBr0tvS";
 
 async function initialLoad() {
-  const response = await fetch(
-    "https://api.thecatapi.com/v1/breeds?limit=10&page=0"
+  try {
+    const response = await fetch("https://api.thecatapi.com/v1/breeds?limit=10"
   );
-  const jsonData = await response.json();
-  const breedsID = jsonData.id;
-  //console.log(breedsID);
+    const jsonData = await response.json();
+
+    for (let i = 0; i <= 10; i++) {
+      let ids = jsonData[i].id;
+      //console.log(ids);
+      let names = jsonData[i].name;
+      let opt = document.createElement("option");
+      opt.setAttribute("value", ids);
+      opt.innerHTML = names;
+      breedSelect.appendChild(opt);
+    }
+  } catch (err) {
+    console.log("Error: ", err);
+  }
 }
-//initialLoad();
+
+initialLoad();
+
+
 
 
 /**
