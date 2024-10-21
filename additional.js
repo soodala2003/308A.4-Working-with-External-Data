@@ -71,6 +71,7 @@ const li2 = document.createElement("li");
 const li3 = document.createElement("li");
 const li4 = document.createElement("li");
 const li5 = document.createElement("li");
+const wikiLink = document.createElement("a");
   
 ul.appendChild(li1);
 ul.appendChild(li2);
@@ -119,7 +120,10 @@ getFavouritesBtn.addEventListener("click", function () {
     li2.innerHTML = `<p>Temperament: ${selectedBreed.temperament}</p>`;
     li3.innerHTML = `<p>Origin: ${selectedBreed.origin}</p>`;
     li4.innerHTML = `<p>Life Span: ${selectedBreed.life_span}</p>`;
-    li5.innerHTML = `<p>More Information: ${selectedBreed.wikipedia_url}</p>`;
+    li5.innerHTML = `<p>More Information: </p>`;
+    wikiLink.setAttribute("href", `${selectedBreed.wikipedia_url}`);
+    wikiLink.textContent = `${selectedBreed.wikipedia_url}`;
+    li5.appendChild(wikiLink);
   
     // Reset the select element
     breedSelect.selectedIndex = -1;
@@ -131,7 +135,9 @@ getFavouritesBtn.addEventListener("click", function () {
  * - Add a console.log statement to indicate when requests begin.
  * - As an added challenge, try to do this on your own without referencing the lesson material.
  */
-
+axios.interceptors.request.use(function (config) {
+    return config;
+});
 
   
   
