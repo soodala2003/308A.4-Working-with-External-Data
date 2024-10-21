@@ -82,22 +82,30 @@ getFavouritesBtn.addEventListener("click", function () {
   const selectedBreedIndex = breedSelect.selectedIndex;
   //console.log(selectedBreedVal); //returns id
 
-  let breed = storedBreeds[selectedBreedIndex];
-  //console.log(breed);
-  let carousel = document.createElement("div");
-  carousel.setAttribute("class", "carousel-item");
-  carousel.textContent = `${breed.name}`;
-  parentEl.appendChild(carousel);
+  for (let i = 0; i < storedBreeds.length; i++) {
+    let breed = storedBreeds[i];
+    let carousel = document.createElement("div");
+    parentEl.appendChild(carousel);
+    carousel.setAttribute("id", `${breed.id}`);
+    carousel.setAttribute("class", "carousel-item");
+    carousel.textContent = `${breed.name}`;
+    parentEl.appendChild(carousel);
+  }
 
-  h4.innerHTML = breed.name;
+  let selectedBreed = storedBreeds[selectedBreedIndex];
+  //console.log(selectedBreed.name);
+  let carouselID = document.getElementById(selectedBreed.id);
+
+  carouselID.setAttribute("class", "carousel-item active");
+   
+  h4.innerHTML = selectedBreed.name;
   h4.appendChild(ul);
-  li1.innerHTML = `<p>${breed.description}</p>`;
-  li2.innerHTML = `<p>Temperament: ${breed.temperament}</p>`;
-  li3.innerHTML = `<p>Origin: ${breed.origin}</p>`;
-  li4.innerHTML = `<p>Life Span: ${breed.life_span}</p>`;
-  li5.innerHTML = `<p>More Information: ${breed.wikipedia_url}</p>`;
+  li1.innerHTML = `<p>Description: ${selectedBreed.description}</p>`;
+  li2.innerHTML = `<p>Temperament: ${selectedBreed.temperament}</p>`;
+  li3.innerHTML = `<p>Origin: ${selectedBreed.origin}</p>`;
+  li4.innerHTML = `<p>Life Span: ${selectedBreed.life_span}</p>`;
+  li5.innerHTML = `<p>More Information: ${selectedBreed.wikipedia_url}</p>`;
 });
-
 /**
  * 2. Create an event handler for breedSelect that does the following:
  * - Retrieve information on the selected breed from the cat API using fetch().
