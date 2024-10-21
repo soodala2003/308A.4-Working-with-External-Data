@@ -1,12 +1,6 @@
 import * as Carousel from "./Carousel.js";
 //import axios from "axios";
 
-const API = axios.create({
-	baseURL: 'http://localhost:3000/',
-})
-
-export default API; 
-
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
 // The information section div element.
@@ -39,7 +33,7 @@ async function initialLoad() {
     // Flter to only include thoes with an `image` object
     //jsonData = jsonData.filter(img => img.image?.url!=null);
     storedBreeds = jsonData;
-    console.log(storedBreeds);
+    //console.log(storedBreeds);
 
     for (let i = 0; i < storedBreeds.length; i++) {
       const breed = storedBreeds[i];
