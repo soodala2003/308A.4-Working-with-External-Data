@@ -21,6 +21,14 @@ const API_KEY = "live_2L5qpy6HjWEc4qxT1JVDCifdbhbUKnvSXv3S5Awwj7ygiHvXZgwvqCPjpa
 const url = "https://api.thecatapi.com/v1/breeds";
 let storedBreeds = [];
 
+/**
+ * 1. Create an async function "initialLoad" that does the following:
+ * - Retrieve a list of breeds from the cat API using fetch().
+ * - Create new <options> for each of these breeds, and append them to breedSelect.
+ *  - Each option should have a value attribute equal to the id of the breed.
+ *  - Each option should display text equal to the name of the breed.
+ * This function should execute immediately.
+ */
 async function initialLoad() {
   try {
     const response = await fetch(url, {headers: {
@@ -49,17 +57,24 @@ async function initialLoad() {
   } catch (err) {
     console.log("Error: ", err);
   }
+  createCarousel();
 }
 
 initialLoad();
 
 /**
- * 1. Create an async function "initialLoad" that does the following:
- * - Retrieve a list of breeds from the cat API using fetch().
- * - Create new <options> for each of these breeds, and append them to breedSelect.
- *  - Each option should have a value attribute equal to the id of the breed.
- *  - Each option should display text equal to the name of the breed.
- * This function should execute immediately.
+ * 2. Create an event handler for breedSelect that does the following:
+ * - Retrieve information on the selected breed from the cat API using fetch().
+ *  - Make sure your request is receiving multiple array items!
+ *  - Check the API documentation if you're only getting a single object.
+ * - For each object in the response array, create a new element for the carousel.
+ *  - Append each of these new elements to the carousel.
+ * - Use the other data you have been given to create an informational section within the infoDump element.
+ *  - Be creative with how you create DOM elements and HTML.
+ *  - Feel free to edit index.html and styles.css to suit your needs, but be careful!
+ *  - Remember that functionality comes first, but user experience and design are important.
+ * - Each new selection should clear, re-populate, and restart the Carousel.
+ * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
  */
 
 const parentEl = document.getElementById("carouselInner");
@@ -77,11 +92,8 @@ ul.appendChild(li3);
 ul.appendChild(li4);
 ul.appendChild(li5);
 
-getFavouritesBtn.addEventListener("click", function () {
-  const selectedBreedVal = breedSelect.value;
-  const selectedBreedIndex = breedSelect.selectedIndex;
-  //console.log(selectedBreedVal); //returns id
-
+// Create the initial carousel.
+function createCarousel() {
   for (let i = 0; i < storedBreeds.length; i++) {
     let breed = storedBreeds[i];
     let carousel = document.createElement("div");
@@ -91,6 +103,23 @@ getFavouritesBtn.addEventListener("click", function () {
     carousel.textContent = `${breed.name}`;
     parentEl.appendChild(carousel);
   }
+}
+
+// Restart the carousel.
+function restartCarousel() {
+  let child = parentEl.firstElementChild;
+  while (child) {
+    parentEl.removeChild(child);
+    child = parentEl.firstElementChild;
+  }
+}
+
+getFavouritesBtn.addEventListener("click", function () {
+  restartCarousel();
+  createCarousel();
+  const selectedBreedVal = breedSelect.value;
+  const selectedBreedIndex = breedSelect.selectedIndex;
+  //console.log(selectedBreedVal); //returns id
 
   let selectedBreed = storedBreeds[selectedBreedIndex];
   //console.log(selectedBreed.name);
@@ -106,20 +135,6 @@ getFavouritesBtn.addEventListener("click", function () {
   li4.innerHTML = `<p>Life Span: ${selectedBreed.life_span}</p>`;
   li5.innerHTML = `<p>More Information: ${selectedBreed.wikipedia_url}</p>`;
 });
-/**
- * 2. Create an event handler for breedSelect that does the following:
- * - Retrieve information on the selected breed from the cat API using fetch().
- *  - Make sure your request is receiving multiple array items!
- *  - Check the API documentation if you're only getting a single object.
- * - For each object in the response array, create a new element for the carousel.
- *  - Append each of these new elements to the carousel.
- * - Use the other data you have been given to create an informational section within the infoDump element.
- *  - Be creative with how you create DOM elements and HTML.
- *  - Feel free to edit index.html and styles.css to suit your needs, but be careful!
- *  - Remember that functionality comes first, but user experience and design are important.
- * - Each new selection should clear, re-populate, and restart the Carousel.
- * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
- */
 
 /**
  * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
