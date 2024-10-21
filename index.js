@@ -62,48 +62,41 @@ initialLoad();
  * This function should execute immediately.
  */
 
-getFavouritesBtn.addEventListener("click", (async () => {
-  // Get the selected breed("value")
+const parentEl = document.getElementById("carouselInner");
+const h4 = document.querySelector("h4");
+const ul = document.createElement("ul");
+const li1 = document.createElement("li");
+const li2 = document.createElement("li");
+const li3 = document.createElement("li");
+const li4 = document.createElement("li");
+const li5 = document.createElement("li");
+
+ul.appendChild(li1);
+ul.appendChild(li2);
+ul.appendChild(li3);
+ul.appendChild(li4);
+ul.appendChild(li5);
+
+getFavouritesBtn.addEventListener("click", function () {
   const selectedBreedVal = breedSelect.value;
-  //const selectedBreed = breedSelect.options[breedSelect.selectedIndex].value;
-  
-  // Get the index of the selected breed
   const selectedBreedIndex = breedSelect.selectedIndex;
-  //console.log(selectedBreedIndex);
-  const response = await fetch(url, {headers: {
-    "x-api-key": API_KEY
-  }});
-  const jsonData = await response.json();
-  storedBreeds = jsonData;
-  //const selectedBreed = storedBreeds[selectedBreedIndex];
-  //console.log(selectedBreed);
-  const parentEl = document.getElementById("carouselInner");
-  const infoParentEl = document.getElementById("infoDump");
-  const h4 = document.createElement("h4");
+  //console.log(selectedBreedVal); //returns id
 
-  for (let i = 0; i < storedBreeds.length; i++) {
-    const breed = storedBreeds[i];
-    let carousel = document.createElement("div");
-    if (i === 0) {
-      carousel.setAttribute("class", "carousel-item active");
-      carousel.textContent = `${breed.name}`;
-      parentEl.appendChild(carousel);
-    }
-    else {
-      carousel.setAttribute("class", "carousel-item");
-      carousel.textContent = `${breed.name}`;
-      parentEl.appendChild(carousel);
-    }
+  let breed = storedBreeds[selectedBreedIndex];
+  //console.log(breed);
+  let carousel = document.createElement("div");
+  carousel.setAttribute("class", "carousel-item");
+  carousel.textContent = `${breed.name}`;
+  parentEl.appendChild(carousel);
 
-    h4.innerHTML = `${breed.name}<hr>${breed.description}<hr>Origin: ${breed.origin}<br>
-    Life span: ${breed.life_span}`; 
-    infoParentEl.appendChild(h4);
-
-    
-  }
-}) 
-
-);
+  h4.innerHTML = breed.name;
+  h4.appendChild(ul);
+  li1.innerHTML = `<p>${breed.description}</p>`;
+  li2.innerHTML = `<p>Temperament: ${breed.temperament}</p>`;
+  li3.innerHTML = `<p>Origin: ${breed.origin}</p>`;
+  li4.innerHTML = `<p>Life Span: ${breed.life_span}</p>`;
+  li5.innerHTML = `<p>More Information: ${breed.wikipedia_url}</p>`;
+});
 
 /**
  * 2. Create an event handler for breedSelect that does the following:
