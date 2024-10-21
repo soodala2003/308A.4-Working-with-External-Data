@@ -52,6 +52,8 @@ async function initialLoad() {
     console.log("Error: ", err);
   }
   createCarousel();
+  // Reset the select element
+  breedSelect.selectedIndex = -1;
 }
 
 initialLoad();
@@ -79,6 +81,7 @@ const li2 = document.createElement("li");
 const li3 = document.createElement("li");
 const li4 = document.createElement("li");
 const li5 = document.createElement("li");
+const wikiLink = document.createElement("a");
 
 ul.appendChild(li1);
 ul.appendChild(li2);
@@ -120,6 +123,7 @@ getFavouritesBtn.addEventListener("click", function () {
   let carouselID = document.getElementById(selectedBreed.id);
 
   carouselID.setAttribute("class", "carousel-item active");
+  
    
   h4.innerHTML = selectedBreed.name;
   h4.appendChild(ul);
@@ -127,7 +131,10 @@ getFavouritesBtn.addEventListener("click", function () {
   li2.innerHTML = `<p>Temperament: ${selectedBreed.temperament}</p>`;
   li3.innerHTML = `<p>Origin: ${selectedBreed.origin}</p>`;
   li4.innerHTML = `<p>Life Span: ${selectedBreed.life_span}</p>`;
-  li5.innerHTML = `<p>More Information: ${selectedBreed.wikipedia_url}</p>`;
+  li5.innerHTML = `<p>More Information: </p>`;//${selectedBreed.wikipedia_url}</p>`;
+  wikiLink.setAttribute("href", `${selectedBreed.wikipedia_url}`);
+  wikiLink.textContent = `${selectedBreed.wikipedia_url}`;
+  li5.appendChild(wikiLink);
 
   // Reset the select element
   breedSelect.selectedIndex = -1;
