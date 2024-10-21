@@ -10,6 +10,8 @@ const progressBar = document.getElementById("progressBar");
 // The get favourites button element.
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
+//const carouselEl = document.createElement("div");
+
 // Step 0: Store your API key here for reference and easy access.
 const API_KEY = "live_2L5qpy6HjWEc4qxT1JVDCifdbhbUKnvSXv3S5Awwj7ygiHvXZgwvqCPjpaBr0tvS";
 const url = "https://api.thecatapi.com/v1/breeds";
@@ -51,7 +53,7 @@ async function initialLoad() {
   } catch (err) {
     console.log("Error: ", err);
   }
-  createCarousel();
+  createElements();
   // Reset the select element
   breedSelect.selectedIndex = -1;
 }
@@ -90,41 +92,29 @@ ul.appendChild(li4);
 ul.appendChild(li5);
 
 // Create the initial carousel.
-function createCarousel() {
+function createElements() {
   for (let i = 0; i < storedBreeds.length; i++) {
     let breed = storedBreeds[i];
-    let carousel = document.createElement("div");
-    parentEl.appendChild(carousel);
-    carousel.setAttribute("id", `${breed.id}`);
-    carousel.setAttribute("class", "carousel-item");
-    carousel.textContent = `${breed.name}`;
-    parentEl.appendChild(carousel);
+    let carouselEl = document.createElement("div");
+    carouselEl.setAttribute("id", `${breed.id}`);
+    carouselEl.setAttribute("class", "carousel-item");
+    carouselEl.textContent = `${breed.name}`;
+    parentEl.appendChild(carouselEl);
   }
-}
-
-// Restart the carousel.
-function restartCarousel() {
-  let child = parentEl.firstElementChild;
-  while (child) {
-    parentEl.removeChild(child);
-    child = parentEl.firstElementChild;
-  }
-}
+} 
 
 getFavouritesBtn.addEventListener("click", function () {
-  restartCarousel();
-  createCarousel();
-  const selectedBreedVal = breedSelect.value;
-  const selectedBreedIndex = breedSelect.selectedIndex;
-  //console.log(selectedBreedVal); //returns id
-
-  let selectedBreed = storedBreeds[selectedBreedIndex];
-  //console.log(selectedBreed.name);
-  let carouselID = document.getElementById(selectedBreed.id);
-
-  carouselID.setAttribute("class", "carousel-item active");
+  const selectedBreedVal = breedSelect.value; //console.log(selectedBreedVal); //returns id
+  const selectedBreedIndex = breedSelect.selectedIndex; //console.log(selectedBreedIndex);  //return index
   
-   
+  let selectedBreed = storedBreeds[selectedBreedIndex]; //console.log(selectedBreed.name);  //return name
+  let carouselElement = document.getElementById(`${selectedBreedVal}`);
+  
+  carouselElement.setAttribute("class", "carousel-item active");
+  console.log(carouselElement); //<div id="abys" class="active">Abyssinian</div>
+  //Carousel.clear();
+  Carousel.appendCarousel(carouselElement);
+  
   h4.innerHTML = selectedBreed.name;
   h4.appendChild(ul);
   li1.innerHTML = `<p>Description: ${selectedBreed.description}</p>`;
