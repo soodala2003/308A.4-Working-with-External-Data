@@ -1,5 +1,5 @@
 import * as Carousel from "./Carousel.js";
-import axios from "axios";
+//import axios from "axios";
 
 //const API = axios.create({
 //	baseURL: 'http://localhost:3000/',
@@ -18,21 +18,33 @@ const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 
 // Step 0: Store your API key here for reference and easy access.
 const API_KEY = "live_2L5qpy6HjWEc4qxT1JVDCifdbhbUKnvSXv3S5Awwj7ygiHvXZgwvqCPjpaBr0tvS";
+const url = "https://api.thecatapi.com/v1/breeds";
+let storedBreeds = [];
 
 async function initialLoad() {
   try {
-    const response = await fetch("https://api.thecatapi.com/v1/breeds?limit=10"
-  );
+    const response = await fetch(url, {headers: {
+      "x-api-key": API_KEY
+    }});
     const jsonData = await response.json();
 
-    for (let i = 0; i <= 10; i++) {
-      let ids = jsonData[i].id;
-      //console.log(ids);
-      let names = jsonData[i].name;
+    // Flter to only include thoes with an `image` object
+    //jsonData = jsonData.filter(img => img.image?.url!=null);
+    storedBreeds = jsonData;
+    console.log(storedBreeds);
+
+    for (let i = 0; i < storedBreeds.length; i++) {
+      const breed = storedBreeds[i];
+      let option = document.createElement("option");
+      
       let opt = document.createElement("option");
-      opt.setAttribute("value", ids);
-      opt.innerHTML = names;
-      breedSelect.appendChild(opt);
+      if (!breed.image) {
+        continue;
+      }
+      
+      option.value = `${breed.id}`;
+      option.innerHTML = `${breed.name}`;
+      breedSelect.appendChild(option);
     }
   } catch (err) {
     console.log("Error: ", err);
@@ -40,9 +52,6 @@ async function initialLoad() {
 }
 
 initialLoad();
-
-
-
 
 /**
  * 1. Create an async function "initialLoad" that does the following:
@@ -52,6 +61,49 @@ initialLoad();
  *  - Each option should display text equal to the name of the breed.
  * This function should execute immediately.
  */
+
+getFavouritesBtn.addEventListener("click", (async () => {
+  // Get the selected breed("value")
+  const selectedBreedVal = breedSelect.value;
+  //const selectedBreed = breedSelect.options[breedSelect.selectedIndex].value;
+  
+  // Get the index of the selected breed
+  const selectedBreedIndex = breedSelect.selectedIndex;
+  //console.log(selectedBreedIndex);
+  const response = await fetch(url, {headers: {
+    "x-api-key": API_KEY
+  }});
+  const jsonData = await response.json();
+  storedBreeds = jsonData;
+  //const selectedBreed = storedBreeds[selectedBreedIndex];
+  //console.log(selectedBreed);
+  const parentEl = document.getElementById("carouselInner");
+  const infoParentEl = document.getElementById("infoDump");
+  const h4 = document.createElement("h4");
+
+  for (let i = 0; i < storedBreeds.length; i++) {
+    const breed = storedBreeds[i];
+    let carousel = document.createElement("div");
+    if (i === 0) {
+      carousel.setAttribute("class", "carousel-item active");
+      carousel.textContent = `${breed.name}`;
+      parentEl.appendChild(carousel);
+    }
+    else {
+      carousel.setAttribute("class", "carousel-item");
+      carousel.textContent = `${breed.name}`;
+      parentEl.appendChild(carousel);
+    }
+
+    h4.innerHTML = `${breed.name}<hr>${breed.description}<hr>Origin: ${breed.origin}<br>
+    Life span: ${breed.life_span}`; 
+    infoParentEl.appendChild(h4);
+
+    
+  }
+}) 
+
+);
 
 /**
  * 2. Create an event handler for breedSelect that does the following:
