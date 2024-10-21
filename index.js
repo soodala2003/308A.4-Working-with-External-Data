@@ -1,11 +1,11 @@
 import * as Carousel from "./Carousel.js";
 //import axios from "axios";
 
-//const API = axios.create({
-//	baseURL: 'http://localhost:3000/',
-//})
+const API = axios.create({
+	baseURL: 'http://localhost:3000/',
+})
 
-//export default API; */
+export default API; 
 
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
@@ -134,6 +134,9 @@ getFavouritesBtn.addEventListener("click", function () {
   li3.innerHTML = `<p>Origin: ${selectedBreed.origin}</p>`;
   li4.innerHTML = `<p>Life Span: ${selectedBreed.life_span}</p>`;
   li5.innerHTML = `<p>More Information: ${selectedBreed.wikipedia_url}</p>`;
+
+  // Reset the select element
+  breedSelect.selectedIndex = -1;
 });
 
 /**
