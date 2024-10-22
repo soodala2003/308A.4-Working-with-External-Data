@@ -1,10 +1,11 @@
 import * as Carousel from "./Carousel.js";
-//import axios from "axios";
+import axios from "axios";
 /* const API = axios.create({
 	baseURL: 'http://localhost:3000/',
 })
 
 export default API;  */
+//const axios = require("axios").default;
 
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
@@ -41,6 +42,7 @@ async function initialLoad() {
             "x-api-key": API_KEY,
         },
     });
+    console.log("Requests begin: ");
   
     storedBreeds = response.data;
     //console.log(storedBreeds);
@@ -83,36 +85,33 @@ ul.appendChild(li5);
 function createCarousel() {
     for (let i = 0; i < storedBreeds.length; i++) {
         let breed = storedBreeds[i];
-        let carousel = document.createElement("div");
-        parentEl.appendChild(carousel);
-        carousel.setAttribute("id", `${breed.id}`);
-        carousel.setAttribute("class", "carousel-item");
-        carousel.textContent = `${breed.name}`;
-        parentEl.appendChild(carousel);
+        let carouselEl = document.createElement("div");
+        
+        carouselEl.setAttribute("id", `${breed.id}`);
+        carouselEl.setAttribute("class", "carousel-item");
+        carouselEl.textContent = `${breed.name}`;
+        parentEl.appendChild(carouselEl);
     }
 }
   
 // Restart the carousel.
-function restartCarousel() {
+/* function restartCarousel() {
     let child = parentEl.firstElementChild;
     while (child) {
         parentEl.removeChild(child);
         child = parentEl.firstElementChild;
     }
 }
-  
+   */
 getFavouritesBtn.addEventListener("click", function () {
-    restartCarousel();
-    createCarousel();
     const selectedBreedVal = breedSelect.value;
     const selectedBreedIndex = breedSelect.selectedIndex;
   
-    let selectedBreed = storedBreeds[selectedBreedIndex];
-    //console.log(selectedBreed.name);
-    let carouselID = document.getElementById(selectedBreedVal);
+    let selectedBreed = storedBreeds[selectedBreedIndex]; //console.log(selectedBreed.name);
+    let carouselElement = document.getElementById(`${selectedBreedVal}`);
   
-    //carouselID.h4.innerHTML = selectedBreed.name;
-    carouselID.setAttribute("class", "carousel-item active");
+    carouselElement.setAttribute("class", "carousel-item active");
+    Carousel.appendCarousel(carouselElement);
   
     h4.innerHTML = selectedBreed.name;
     h4.appendChild(ul);
@@ -135,12 +134,64 @@ getFavouritesBtn.addEventListener("click", function () {
  * - Add a console.log statement to indicate when requests begin.
  * - As an added challenge, try to do this on your own without referencing the lesson material.
  */
-axios.interceptors.request.use(function (config) {
+
+// Request interceptor will set startTime
+axios.interceptors.request.use((config) => {
+    config.headers["request-startTime"] = new Date().getTime();
     return config;
 });
+  
+axios.interceptors.response.use((response) => {
+    const currentTime = new Date().getTime();
+    const startTime = response.config.headers["request-startTime"];
+    response.headers["request-duration"] = currentTime - startTime;
+    return response;
+});
+  
+axios
+    .get(url)
+    .then((response) => {
+      console.log(response.headers["request-duration"]);
+    })
+    .catch((error) => {
+      console.error(`Error`);
+    });
+  
 
+/* axios.interceptors.request.use(
+    function (config) {
+      //Do something before request is sent
+      //console.time(config.url);
+      config.metadata = { startTime: new Date() };
+      return config;
+    },
+    function (error) {
+      // Do something with request error
+      return Promise.reject(error);
+    }
+);
   
-  
+  // Add a response interceptor
+  // Response interceptor will set endTime & calculate the duration
+  axios.interceptors.response.use(
+    function (response) {
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      //console.timeEnd(response.config.url);
+      response.comfig.metadata.endTime = new Date();
+      response.duration =
+        response.config.metadata.endTime - response.config.metadata.startTime;
+      return response;
+    },
+    function (error) {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      //console.timeEnd(error.response.comfig.url);
+      error.confi.metadata.endTime - error.config.metadata.startTime;
+      return Promise.reject(error);
+    }
+);
+   */
 
 
 
