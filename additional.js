@@ -1,5 +1,5 @@
 import * as Carousel from "./Carousel.js";
-import axios from "axios";
+//import axios from "axios";
 //module.exports = axios;
 /* const API = axios.create({
 	baseURL: 'http://localhost:3000/',
