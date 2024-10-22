@@ -1,5 +1,6 @@
 import * as Carousel from "./Carousel.js";
 import axios from "axios";
+//module.exports = axios;
 /* const API = axios.create({
 	baseURL: 'http://localhost:3000/',
 })
@@ -42,7 +43,7 @@ async function initialLoad() {
             "x-api-key": API_KEY,
         },
     });
-    console.log("Requests begin: ");
+    console.log("Request begins: ");
   
     storedBreeds = response.data;
     //console.log(storedBreeds);
@@ -151,49 +152,13 @@ axios.interceptors.response.use((response) => {
 axios
     .get(url)
     .then((response) => {
-      console.log(response.headers["request-duration"]);
+        console.log(
+            `Request took ${response.headers["request-duration"]} milliseconds.`
+        );
     })
     .catch((error) => {
       console.error(`Error`);
     });
-  
-
-/* axios.interceptors.request.use(
-    function (config) {
-      //Do something before request is sent
-      //console.time(config.url);
-      config.metadata = { startTime: new Date() };
-      return config;
-    },
-    function (error) {
-      // Do something with request error
-      return Promise.reject(error);
-    }
-);
-  
-  // Add a response interceptor
-  // Response interceptor will set endTime & calculate the duration
-  axios.interceptors.response.use(
-    function (response) {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-      //console.timeEnd(response.config.url);
-      response.comfig.metadata.endTime = new Date();
-      response.duration =
-        response.config.metadata.endTime - response.config.metadata.startTime;
-      return response;
-    },
-    function (error) {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
-      //console.timeEnd(error.response.comfig.url);
-      error.confi.metadata.endTime - error.config.metadata.startTime;
-      return Promise.reject(error);
-    }
-);
-   */
-
-
 
 /**
  * 8. To practice posting data, we'll create a system to "favourite" certain images.
