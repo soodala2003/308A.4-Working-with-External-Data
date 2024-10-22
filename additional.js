@@ -38,13 +38,13 @@ let storedBreeds = [];
  *   send it manually with all of your requests! You can also set a default base URL!
  */
 async function initialLoad() {
+    console.log("Request begins: ");
     const response = await axios.get(url, {
         headers: {
             "x-api-key": API_KEY,
         },
     });
-    console.log("Request begins: ");
-  
+    
     storedBreeds = response.data;
     //console.log(storedBreeds);
     for (let i = 0; i < storedBreeds.length; i++) {
@@ -94,16 +94,7 @@ function createCarousel() {
         parentEl.appendChild(carouselEl);
     }
 }
-  
-// Restart the carousel.
-/* function restartCarousel() {
-    let child = parentEl.firstElementChild;
-    while (child) {
-        parentEl.removeChild(child);
-        child = parentEl.firstElementChild;
-    }
-}
-   */
+
 getFavouritesBtn.addEventListener("click", function () {
     const selectedBreedVal = breedSelect.value;
     const selectedBreedIndex = breedSelect.selectedIndex;
@@ -139,6 +130,7 @@ getFavouritesBtn.addEventListener("click", function () {
 // Request interceptor will set startTime
 axios.interceptors.request.use((config) => {
     config.headers["request-startTime"] = new Date().getTime();
+    progressBar.style.width = "0%";
     return config;
 });
   
@@ -159,6 +151,54 @@ axios
     .catch((error) => {
       console.error(`Error`);
     });
+
+/**
+ * 6. Next, we'll create a progress bar to indicate the request is in progress.
+ * - The progressBar element has already been created for you.
+ *  - You need only to modify its "width" style property to align with the request progress.
+ * - In your request interceptor, set the width of the progressBar element to 0%.
+ *  - This is to reset the progress with each request.
+ * - Research the axios onDownloadProgress config option.
+ * - Create a function "updateProgress" that receives a ProgressEvent object.
+ *  - Pass this function to the axios onDownloadProgress config option in your event handler.
+ * - console.log your ProgressEvent object within updateProgess, and familiarize yourself with its structure.
+ *  - Update the progress of the request using the properties you are given.
+ * - Note that we are not downloading a lot of data, so onDownloadProgress will likely only fire
+ *   once or twice per request to this API. This is still a concept worth familiarizing yourself
+ *   with for future projects.
+ */
+function updateProgress(progressEvent) {
+    const progress = Math.round(
+      (progressEvent.loaded * 100) / progressEvent.total
+    );
+    console.log(`Request Progress: ${progress} %`);
+  }
+  
+axios
+    .get(
+        url,
+        { onDownloadProgress: (progressEvent) => {
+            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            progressBar.style.width = `${progress}%`;
+            console.log(`Request Progress: ${progress} %`);
+            },
+        },
+        { responseType: "json" },
+        { header: { "Content-Type": "application/json" } }
+    )
+    .then((response) => {
+        console.log("Response done."); // or "Response done.");
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+  
+/**
+* 7. As a final element of progress indication, add the following to your axios interceptors:
+* - In your request interceptor, set the body element's cursor style to "progress."
+* - In your response interceptor, remove the progress cursor style from the body element.
+*/
+
 
 /**
  * 8. To practice posting data, we'll create a system to "favourite" certain images.
