@@ -17,63 +17,41 @@ const API_KEY = "live_2L5qpy6HjWEc4qxT1JVDCifdbhbUKnvSXv3S5Awwj7ygiHvXZgwvqCPjpa
 const url = "https://api.thecatapi.com/v1/breeds";
 let storedBreeds = [];
 
-/**
- * 1. Create an async function "initialLoad" that does the following:
- * - Retrieve a list of breeds from the cat API using fetch().
- * - Create new <options> for each of these breeds, and append them to breedSelect.
- *  - Each option should have a value attribute equal to the id of the breed.
- *  - Each option should display text equal to the name of the breed.
- * This function should execute immediately.
- */
 async function initialLoad() {
-  try {
-    const response = await fetch(url, {headers: {
-      "x-api-key": API_KEY
-    }});
-    const jsonData = await response.json();
+    try {
+        const response = await fetch(url, {headers: {
+            "x-api-key": API_KEY
+        }});
+        const jsonData = await response.json();
 
-    // Flter to only include thoes with an `image` object
-    //jsonData = jsonData.filter(img => img.image?.url!=null);
-    storedBreeds = jsonData;
-    //console.log(storedBreeds);
+        // Flter to only include thoes with an `image` object
+        //jsonData = jsonData.filter(img => img.image?.url!=null);
+        storedBreeds = jsonData;
+        //console.log(storedBreeds[0]);
 
-    for (let i = 0; i < storedBreeds.length; i++) {
-      const breed = storedBreeds[i];
-      let option = document.createElement("option");
+        for (let i = 0; i < storedBreeds.length; i++) {
+            const breed = storedBreeds[i];
+            let option = document.createElement("option");
       
-      let opt = document.createElement("option");
-      if (!breed.image) {
-        continue;
-      }
+            /* let opt = document.createElement("option");
+            if (!breed.image) {
+                continue;
+            } */
       
-      option.value = `${breed.id}`;
-      option.innerHTML = `${breed.name}`;
-      breedSelect.appendChild(option);
+            option.value = `${breed.id}`;
+            option.innerHTML = `${breed.name}`;
+            breedSelect.appendChild(option);
+        }
+    } catch (errors) {
+        console.log(errors);
     }
-  } catch (err) {
-    console.log("Error: ", err);
-  }
-  createElements();
-  // Reset the select element
-  breedSelect.selectedIndex = -1;
+    //return storedBreeds;
+    createCarousel();
+    // Reset the select element
+    breedSelect.selectedIndex = -1;
 }
 
 initialLoad();
-
-/**
- * 2. Create an event handler for breedSelect that does the following:
- * - Retrieve information on the selected breed from the cat API using fetch().
- *  - Make sure your request is receiving multiple array items!
- *  - Check the API documentation if you're only getting a single object.
- * - For each object in the response array, create a new element for the carousel.
- *  - Append each of these new elements to the carousel.
- * - Use the other data you have been given to create an informational section within the infoDump element.
- *  - Be creative with how you create DOM elements and HTML.
- *  - Feel free to edit index.html and styles.css to suit your needs, but be careful!
- *  - Remember that functionality comes first, but user experience and design are important.
- * - Each new selection should clear, re-populate, and restart the Carousel.
- * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
- */
 
 const parentEl = document.getElementById("carouselInner");
 const h4 = document.querySelector("h4");
@@ -92,7 +70,7 @@ ul.appendChild(li4);
 ul.appendChild(li5);
 
 // Create the initial carousel.
-function createElements() {
+function createCarousel() {
   for (let i = 0; i < storedBreeds.length; i++) {
     let breed = storedBreeds[i];
     let carouselEl = document.createElement("div");

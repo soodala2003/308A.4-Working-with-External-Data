@@ -47,7 +47,7 @@ async function initialLoad() {
             option.innerHTML = `${breed.name}`;
             breedSelect.appendChild(option);
         }
-        return storedBreeds;
+        //return storedBreeds; if included, make an error
     } catch (errors) {
         console.error(errors);
     }
@@ -74,6 +74,7 @@ ul.appendChild(li3);
 ul.appendChild(li4);
 ul.appendChild(li5);
   
+//console.log(storedBreeds[0]);  //undefined
 // Create the initial carousel.
 function createCarousel() {
     for (let i = 0; i < storedBreeds.length; i++) {
@@ -113,7 +114,7 @@ getFavouritesBtn.addEventListener("click", function () {
     //return selectedBreedId = selectedBreedVal;
 });
 
-console.log(breedSelect.value);
+console.log(breedSelect.value); // ?
 // Request interceptor will set startTime
 axios.interceptors.request.use((config) => {
     config.headers["request-startTime"] = new Date().getTime();
