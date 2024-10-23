@@ -74,6 +74,8 @@ ul.appendChild(li2);
 ul.appendChild(li3);
 ul.appendChild(li4);
 ul.appendChild(li5);
+
+const cloneParentDiv = document.getElementById("clone");
   
 //console.log(storedBreeds[0]);  //undefined
 // Create the initial carousel.
@@ -99,19 +101,11 @@ function createCarousel() {
 getFavouritesBtn.addEventListener("click", function () {
     //Carousel.clear();
     //createCarousel();
-    //const template = document.querySelector("#carouselItemTemplate");
-    //const clone = template.content.firstElementChild.cloneNode(true);
-
-    //const favBtn = clone.querySelector(".favourite-button");
-    //favBtn.addEventListener("click", () => {
-    //favourite(imgId);
-    //});
-
     const selectedBreedId = breedSelect.value;  
     const selectedBreedIndex = breedSelect.selectedIndex;
   
     let selectedBreed = storedBreeds[selectedBreedIndex]; //console.log(selectedBreed.name);
-    let carouselElement = document.getElementById(`${selectedBreedId}`);
+    //let carouselElement = document.getElementById(`${selectedBreedId}`);
     console.log(selectedBreed);
 
     //let img = document.createElement("img");
@@ -120,8 +114,9 @@ getFavouritesBtn.addEventListener("click", function () {
     //img.alt = selectedBreed.name;
     //carouselElement.appendChild(img); 
   
-    carouselElement.setAttribute("class", "carousel-item active");
-    Carousel.appendCarousel(carouselElement);
+    //carouselElement.setAttribute("class", "carousel-item active");
+    //Carousel.clear();
+    //Carousel.appendCarousel(carouselElement);
   
     h4.innerHTML = selectedBreed.name;
     h4.appendChild(ul);
@@ -135,15 +130,18 @@ getFavouritesBtn.addEventListener("click", function () {
     li5.appendChild(wikiLink);
   
     let imgSrc = selectedBreed.image.url;
-    console.log(imgSrc);
+    //console.log(imgSrc);
     let imgAlt = selectedBreed.name;
-    console.log(imgAlt);
+    //console.log(imgAlt);
     let imgId = selectedBreed.image.id;
-    console.log(imgId);
+    //console.log(imgId);
     let clone = Carousel.createCarouselItem(imgSrc, imgAlt, imgId);
 
-    document.body.appendChild(clone);
-    console.log((clone.previousElementSibling).previousElementSibling);
+    //document.body.appendChild(clone);
+    //cloneParentDiv.remove();
+    //cloneParentDiv.insertBefore(clone,cloneParentDiv.lastChild);
+    Carousel.appendCarousel(clone);
+    //console.log((clone.previousElementSibling).previousElementSibling);
 
     // Reset the select element
     breedSelect.selectedIndex = -1;
