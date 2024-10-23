@@ -143,6 +143,7 @@ getFavouritesBtn.addEventListener("click", function () {
     let clone = Carousel.createCarouselItem(imgSrc, imgAlt, imgId);
 
     document.body.appendChild(clone);
+    console.log((clone.previousElementSibling).previousElementSibling);
 
     // Reset the select element
     breedSelect.selectedIndex = -1;
@@ -203,13 +204,9 @@ axios
         console.log(error);
     });
 
-// const URL = "https://api.thecatapi.com/v1/breeds";
-//const API_KEY = "live_2L5qpy6HjWEc4qxT1JVDCifdbhbUKnvSXv3S5Awwj7ygiHvXZgwvqCPjpaBr0tvS";
-
 export async function favourite(imgId) {
     // your code here
     //const catId = "0XYvRd7oD"; //"abys";  
-    //
     const apiUrl = "https://api.thecatapi.com/v1/favourites";
 
     /* const newFavourite = await axios.post(apiUrl, 
@@ -223,7 +220,6 @@ export async function favourite(imgId) {
         console.error("Error:", error);
     });    */
 
-
     axios.post(apiUrl, 
         {headers: {"x-api-key": API_KEY}},
         {data: {"image_id": imgId}}
@@ -236,7 +232,7 @@ export async function favourite(imgId) {
 
 async function getFavourites() {
     axios.get("https://api.thecatapi.com/v1/favourites", 
-        {headers: {"x-api-key": API_KEY}}
+        { headers: {"x-api-key": API_KEY} }
     ).then(response => {
         console.log(response.data);
     }).catch(error => {
@@ -246,9 +242,4 @@ async function getFavourites() {
 
 getFavourites();
 
-/* async function getFavourite() {
-    const favourite = await theCatAPI.favourites.getFavourite(1);
-    return favourite;
-}
- */
 //Carousel.start()
