@@ -5,7 +5,7 @@ import { favourite } from "./additional.js";
 export function createCarouselItem(imgSrc, imgAlt, imgId) {
   const template = document.querySelector("#carouselItemTemplate");
   const clone = template.content.firstElementChild.cloneNode(true);
-
+  //template.content: This is a DocumentFragment object representing the contents of the template.
   const img = clone.querySelector("img");
   img.src = imgSrc;
   img.alt = imgAlt;

@@ -82,8 +82,8 @@ function createCarousel() {
         let carouselEl = document.createElement("div");
         
         carouselEl.setAttribute("id", `${breed.id}`);
-        carouselEl.setAttribute("class", "carousel-item");
-        carouselEl.textContent = `${breed.name}`;
+        //carouselEl.setAttribute("class", "carousel-item");
+        //carouselEl.textContent = `${breed.name}`;
         parentEl.appendChild(carouselEl);
     }
 }
@@ -91,15 +91,15 @@ function createCarousel() {
 //let selectedBreed = "";
 
 getFavouritesBtn.addEventListener("click", function () {
-    Carousel.clear();
-    createCarousel();
+    //Carousel.clear();
+    //createCarousel();
 
     const selectedBreedId = breedSelect.value;  
     const selectedBreedIndex = breedSelect.selectedIndex;
   
     let selectedBreed = storedBreeds[selectedBreedIndex]; //console.log(selectedBreed.name);
     let carouselElement = document.getElementById(`${selectedBreedId}`);
-    //console.log(selectedBreed);
+    console.log(selectedBreed);
   
     carouselElement.setAttribute("class", "carousel-item active");
     Carousel.appendCarousel(carouselElement);
@@ -116,8 +116,11 @@ getFavouritesBtn.addEventListener("click", function () {
     li5.appendChild(wikiLink);
   
     let imgSrc = selectedBreed.image.url;
+    console.log(imgSrc);
     let imgAlt = selectedBreed.name;
+    console.log(imgAlt);
     let imgId = selectedBreed.image.id;
+    console.log(imgId);
     Carousel.createCarouselItem(imgSrc, imgAlt, imgId);
 
     // Reset the select element
@@ -200,7 +203,7 @@ axios
 export async function favourite(imgId) {
     // your code here
     //const catId = "0XYvRd7oD"; //"abys";  
-    const apiUrl = `https://api.thecatapi.com/v1/favourites/${imgId}`;
+    const apiUrl = `https://api.thecatapi.com/v1/favourites/`;
 
     /* try {
         const newFavourite = await axios.post(apiUrl, 
@@ -239,3 +242,4 @@ getFavourites();
     return favourite;
 }
  */
+//Carousel.start()
