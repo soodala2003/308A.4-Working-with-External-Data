@@ -51,9 +51,10 @@ async function initialLoad() {
     } catch (errors) {
         console.error(errors);
     }
-    createCarousel();
+    
     // Reset the select element
     breedSelect.selectedIndex = -1;
+    createCarousel();
 }
 
 initialLoad();
@@ -80,6 +81,11 @@ function createCarousel() {
     for (let i = 0; i < storedBreeds.length; i++) {
         let breed = storedBreeds[i];
         let carouselEl = document.createElement("div");
+        /* let img = document.createElement("img");
+        img.setAttribute("class", "d-block w-100");
+        img.src = breed.image.url;
+        img.alt = breed.name;
+        carouselEl.appendChild(img); */
         
         carouselEl.setAttribute("id", `${breed.id}`);
         //carouselEl.setAttribute("class", "carousel-item");
@@ -93,6 +99,13 @@ function createCarousel() {
 getFavouritesBtn.addEventListener("click", function () {
     //Carousel.clear();
     //createCarousel();
+    //const template = document.querySelector("#carouselItemTemplate");
+    //const clone = template.content.firstElementChild.cloneNode(true);
+
+    //const favBtn = clone.querySelector(".favourite-button");
+    //favBtn.addEventListener("click", () => {
+    //favourite(imgId);
+    //});
 
     const selectedBreedId = breedSelect.value;  
     const selectedBreedIndex = breedSelect.selectedIndex;
@@ -100,6 +113,12 @@ getFavouritesBtn.addEventListener("click", function () {
     let selectedBreed = storedBreeds[selectedBreedIndex]; //console.log(selectedBreed.name);
     let carouselElement = document.getElementById(`${selectedBreedId}`);
     console.log(selectedBreed);
+
+    //let img = document.createElement("img");
+    //img.setAttribute("class", "d-block w-100");
+    //img.src = selectedBreed.image.url;
+    //img.alt = selectedBreed.name;
+    //carouselElement.appendChild(img); 
   
     carouselElement.setAttribute("class", "carousel-item active");
     Carousel.appendCarousel(carouselElement);
@@ -121,7 +140,9 @@ getFavouritesBtn.addEventListener("click", function () {
     console.log(imgAlt);
     let imgId = selectedBreed.image.id;
     console.log(imgId);
-    Carousel.createCarouselItem(imgSrc, imgAlt, imgId);
+    let clone = Carousel.createCarouselItem(imgSrc, imgAlt, imgId);
+
+    document.body.appendChild(clone);
 
     // Reset the select element
     breedSelect.selectedIndex = -1;
@@ -181,39 +202,27 @@ axios
     .catch((error) => {
         console.log(error);
     });
-  
-/**
- * 8. To practice posting data, we'll create a system to "favourite" certain images.
- * - The skeleton of this function has already been created for you.
- * - This function is used within Carousel.js to add the event listener as items are created.
- *  - This is why we use the export keyword for this function.
- * - Post to the cat API's favourites endpoint with the given ID.
- * - The API documentation gives examples of this functionality using fetch(); use Axios!
- * - Add additional logic to this function such that if the image is already favourited,
- *   you delete that favourite using the API, giving this function "toggle" functionality.
- * - You can call this function by clicking on the heart at the top right of any image.
- */
-//console.log(breedSelect.value); // nothing
-//console.log(storedBreeds[0]); //undefined
-//console.log(selectedBreed); // nothing
 
 // const URL = "https://api.thecatapi.com/v1/breeds";
-//let favourites = [];
+//const API_KEY = "live_2L5qpy6HjWEc4qxT1JVDCifdbhbUKnvSXv3S5Awwj7ygiHvXZgwvqCPjpaBr0tvS";
 
 export async function favourite(imgId) {
     // your code here
     //const catId = "0XYvRd7oD"; //"abys";  
-    const apiUrl = `https://api.thecatapi.com/v1/favourites/`;
+    //
+    const apiUrl = "https://api.thecatapi.com/v1/favourites";
 
-    /* try {
-        const newFavourite = await axios.post(apiUrl, 
-            {headers: {"x-api-key": API_KEY,}},
-            {data: {"image_id": catId, "sub_id": "user-1972"}},
-        );
-        
-    } catch (error) {
-        console.error("Error", error);
-    }  */
+    /* const newFavourite = await axios.post(apiUrl, 
+        { headers: {"x-api-key": API_KEY,},},
+        { data: {"image_id": imgId, "sub_id": "user-1972"}} 
+    );
+
+    newFavourite.then(response => {
+        console.log('Cat added to favorites:', response.data);
+    }).catch(error => {
+        console.error("Error:", error);
+    });    */
+
 
     axios.post(apiUrl, 
         {headers: {"x-api-key": API_KEY}},
@@ -226,7 +235,7 @@ export async function favourite(imgId) {
 }
 
 async function getFavourites() {
-    axios.get("https://api.thecatapi.com/v1/favourites?limit=20", 
+    axios.get("https://api.thecatapi.com/v1/favourites", 
         {headers: {"x-api-key": API_KEY}}
     ).then(response => {
         console.log(response.data);
