@@ -175,7 +175,7 @@ axios
         );
     })
     .catch((error) => {
-      console.error(`Error`);
+      console.error(`Error: ${error}`);
     });
 
 function updateProgress(progressEvent) {
