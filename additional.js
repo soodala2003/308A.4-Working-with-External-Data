@@ -38,7 +38,7 @@ async function initialLoad() {
         });
     
         storedBreeds = response.data;
-        //console.log(storedBreeds);
+        //console.log(storedBreeds[0]);
         for (let i = 0; i < storedBreeds.length; i++) {
             const breed = storedBreeds[i];
             let option = document.createElement("option");
@@ -88,12 +88,18 @@ function createCarousel() {
     }
 }
 
+//let selectedBreed = "";
+
 getFavouritesBtn.addEventListener("click", function () {
-    const selectedBreedId = breedSelect.value; //console.log(selectedBreedVal); 
+    Carousel.clear();
+    createCarousel();
+
+    const selectedBreedId = breedSelect.value;  
     const selectedBreedIndex = breedSelect.selectedIndex;
   
     let selectedBreed = storedBreeds[selectedBreedIndex]; //console.log(selectedBreed.name);
     let carouselElement = document.getElementById(`${selectedBreedId}`);
+    //console.log(selectedBreed);
   
     carouselElement.setAttribute("class", "carousel-item active");
     Carousel.appendCarousel(carouselElement);
@@ -109,12 +115,17 @@ getFavouritesBtn.addEventListener("click", function () {
     wikiLink.textContent = `${selectedBreed.wikipedia_url}`;
     li5.appendChild(wikiLink);
   
+    let imgSrc = selectedBreed.image.url;
+    let imgAlt = selectedBreed.name;
+    let imgId = selectedBreed.image.id;
+    Carousel.createCarouselItem(imgSrc, imgAlt, imgId);
+
     // Reset the select element
     breedSelect.selectedIndex = -1;
-    //return selectedBreedId = selectedBreedVal;
+    //console.log(selectedBreedId); //id
+    //return selectedBreed; //
 });
 
-console.log(breedSelect.value); // ?
 // Request interceptor will set startTime
 axios.interceptors.request.use((config) => {
     config.headers["request-startTime"] = new Date().getTime();
@@ -179,20 +190,52 @@ axios
  *   you delete that favourite using the API, giving this function "toggle" functionality.
  * - You can call this function by clicking on the heart at the top right of any image.
  */
+//console.log(breedSelect.value); // nothing
+//console.log(storedBreeds[0]); //undefined
+//console.log(selectedBreed); // nothing
 
 // const URL = "https://api.thecatapi.com/v1/breeds";
+//let favourites = [];
+
 export async function favourite(imgId) {
     // your code here
-    //const catId = 
+    //const catId = "0XYvRd7oD"; //"abys";  
+    const apiUrl = `https://api.thecatapi.com/v1/favourites/${imgId}`;
 
+    /* try {
+        const newFavourite = await axios.post(apiUrl, 
+            {headers: {"x-api-key": API_KEY,}},
+            {data: {"image_id": catId, "sub_id": "user-1972"}},
+        );
+        
+    } catch (error) {
+        console.error("Error", error);
+    }  */
 
-    const response = await axios({
-        method: "post",
-        url: "https://api.thecatapi.com/v1/favourites",
-        headers: {
-            "x-api-key": API_KEY,
-        },
-    });
-
-    const favourites = response.data;
+    axios.post(apiUrl, 
+        {headers: {"x-api-key": API_KEY}},
+        {data: {"image_id": imgId}}
+    ).then(response => {
+        console.log('Cat added to favorites:', response.data);
+    }).catch(error => {
+        console.error("Error:", error);
+    });  
 }
+
+async function getFavourites() {
+    axios.get("https://api.thecatapi.com/v1/favourites?limit=20", 
+        {headers: {"x-api-key": API_KEY}}
+    ).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error:", error);
+    });
+}
+
+getFavourites();
+
+/* async function getFavourite() {
+    const favourite = await theCatAPI.favourites.getFavourite(1);
+    return favourite;
+}
+ */
