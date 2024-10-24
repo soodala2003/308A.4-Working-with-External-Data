@@ -89,7 +89,7 @@ function createCarousel() {
         img.alt = breed.name;
         carouselEl.appendChild(img); */
         
-        carouselEl.setAttribute("id", `${breed.id}`);
+        //carouselEl.setAttribute("id", `${breed.id}`);
         //carouselEl.setAttribute("class", "carousel-item");
         //carouselEl.textContent = `${breed.name}`;
         parentEl.appendChild(carouselEl);
@@ -196,7 +196,7 @@ axios
         { header: { "Content-Type": "application/json" } }
     )
     .then((response) => {
-        console.log("Response done."); // or "Response done.");
+        console.log("Response done.", response); // or "Response done.");
     })
     .catch((error) => {
         console.log(error);
@@ -219,9 +219,14 @@ export async function favourite(imgId) {
     });    */
 
     axios.post(apiUrl, 
-        {headers: {"x-api-key": API_KEY}},
-        {data: {"image_id": imgId}}
+        {headers: {"Content-Type": "application/json",
+            "x-api-key": API_KEY,
+        }},
+        {data: {"image_id": imgId,
+            "sub_id": "usee-199"
+        }}
     ).then(response => {
+        // Update UI to reflect the favorited state
         console.log('Cat added to favorites:', response.data);
     }).catch(error => {
         console.error("Error:", error);
@@ -229,8 +234,11 @@ export async function favourite(imgId) {
 }
 
 async function getFavourites() {
-    axios.get("https://api.thecatapi.com/v1/favourites", 
-        { headers: {"x-api-key": API_KEY} }
+    axios.get("https://api.thecatapi.com/v1/favourites?limit=5&sub_id=user-199", 
+        {headers: {
+            "content-type":"application/json",
+            "x-api-key": API_KEY
+        }}
     ).then(response => {
         console.log(response.data);
     }).catch(error => {
